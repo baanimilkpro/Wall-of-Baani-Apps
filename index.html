@@ -265,6 +265,9 @@
   <div class="app-grid" id="appGrid"></div>
 
   <script>
+    // 🔁 REPLACE THIS WITH YOUR ACTUAL APPS SCRIPT JSON URL
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVdescwMxwqua2rMXf3J5INrSY8vkoRnruAdnpW5BGgBvKiPBA-Q7HagKGISh81AOBLw/exec';
+
     let allApps = [];
     let categories = [];
 
@@ -272,36 +275,45 @@
     const savedSort = localStorage.getItem('baaniSort') || 'default';
     document.getElementById('sortSelect').value = savedSort;
 
-    // Fetch data from Google Sheet
-    google.script.run.withSuccessHandler(displayApps).getAppsData();
-
-    function displayApps(apps) {
-      allApps = apps; // apps are in sheet order
-      categories = [...new Set(apps.map(app => app.category))];
-      
-      // Build tabs
-      const tabsDiv = document.getElementById('tabs');
-      tabsDiv.innerHTML = '<button class="tab-button active" data-category="all">All</button>' +
-        categories.map(cat => `<button class="tab-button" data-category="${cat}">${cat}</button>`).join('');
-      
-      // Tab click events
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+    // Fetch data from Apps Script JSON endpoint
+    fetch(APPS_SCRIPT_URL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(apps => {
+        allApps = apps;
+        categories = [...new Set(apps.map(app => app.category))];
+        
+        // Build tabs
+        const tabsDiv = document.getElementById('tabs');
+        tabsDiv.innerHTML = '<button class="tab-button active" data-category="all">All</button>' +
+          categories.map(cat => `<button class="tab-button" data-category="${cat}">${cat}</button>`).join('');
+        
+        // Tab click events
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterAndSortApps();
+          });
+        });
+        
+        // Sort change event
+        document.getElementById('sortSelect').addEventListener('change', function(e) {
+          localStorage.setItem('baaniSort', e.target.value);
           filterAndSortApps();
         });
-      });
-      
-      // Sort change event
-      document.getElementById('sortSelect').addEventListener('change', function(e) {
-        localStorage.setItem('baaniSort', e.target.value);
+        
+        // Initial display
         filterAndSortApps();
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        document.getElementById('appGrid').innerHTML = '<p style="color:red; text-align:center;">Failed to load apps. Please check your connection or try again later.</p>';
       });
-      
-      // Initial display
-      filterAndSortApps();
-    }
 
     function filterAndSortApps() {
       const activeCategory = document.querySelector('.tab-button.active')?.dataset.category || 'all';
@@ -312,7 +324,7 @@
         ? [...allApps] 
         : allApps.filter(app => app.category === activeCategory);
       
-      // Apply sorting (default = keep sheet order)
+      // Apply sorting
       switch(sortType) {
         case 'name-asc':
           filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -323,7 +335,7 @@
         case 'category':
           filtered.sort((a, b) => a.category.localeCompare(b.category));
           break;
-        // 'default' does nothing – keeps original sheet order
+        // 'default' keeps original sheet order (as returned from the API)
       }
       
       renderGrid(filtered);
@@ -343,5 +355,4 @@
     }
   </script>
 </body>
-
 </html>
