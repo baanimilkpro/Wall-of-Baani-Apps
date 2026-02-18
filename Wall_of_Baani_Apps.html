@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* 3D Design – Mobile‑First, Fully Responsive */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f0f4fa 0%, #e6ecf5 100%);
+      min-height: 100vh;
+      padding: 20px 16px;
+      color: #1e2b3a;
+    }
+
+    /* Header – stacks on mobile */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 700;
+      color: #1f3a5f;
+      text-shadow: 2px 2px 0 #cbd5e0, 4px 4px 0 rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    h1 img {
+      height: 1.2em;
+      border-radius: 8px;
+      box-shadow: 
+        0 8px 0 #3b6f9e,
+        0 12px 20px -8px #1f4a72,
+        0 0 0 2px #fff,
+        0 0 0 4px #a3c6e9;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: white;
+    }
+    h1 img:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 0 #2c5480,
+        0 18px 25px -8px #123a5a,
+        0 0 0 2px #fff,
+        0 0 0 4px #7ca9d9;
+    }
+
+    /* Sort controls – full width on mobile */
+    .sort-controls {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 40px;
+      box-shadow: 0 4px 0 #a0b8d0, 0 6px 12px -5px #7a94b0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .sort-controls label {
+      font-weight: 600;
+      color: #1f3a5f;
+      font-size: 0.9rem;
+    }
+    .sort-controls select {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      color: #1f3a5f;
+      background: white;
+      box-shadow: inset 0 -2px 0 #cbd5e0;
+      cursor: pointer;
+      outline: none;
+      font-size: 0.9rem;
+      flex: 1 1 auto;
+      min-width: 140px;
+    }
+
+    /* Tabs – horizontal scroll on mobile */
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding: 5px 0 10px 0;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      white-space: nowrap;
+    }
+    .tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .tabs::-webkit-scrollbar-thumb {
+      background: #a0b8d0;
+      border-radius: 4px;
+    }
+    .tab-button {
+      background: #e2eaf5;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #1f3a5f;
+      font-size: 0.95rem;
+      box-shadow: 0 5px 0 #6b8eb0, 0 8px 12px -5px #3f6280;
+      transition: all 0.1s ease;
+      border: 1px solid #ffffffc0;
+      flex-shrink: 0;
+    }
+    .tab-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 0 #4f739a, 0 12px 18px -5px #2a4560;
+    }
+    .tab-button:active, .tab-button.active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #4f739a, 0 5px 8px -3px #2a4560;
+      background: #c9ddf5;
+      color: #0a1c30;
+    }
+
+    /* App grid – 1 column on mobile, adjusts up */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+      padding: 5px;
+    }
+    @media (min-width: 480px) {
+      .app-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+    }
+
+    /* App tile – 3D card, full width on mobile */
+    .app-tile {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 25px 15px;
+      text-align: center;
+      box-shadow: 
+        0 18px 0 #b0c8e0,
+        0 25px 25px -12px #7a94b0,
+        inset 0 -4px 0 #d9e4f0;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      width: 100%;
+    }
+    .app-tile:hover {
+      transform: translateY(-6px);
+      box-shadow: 
+        0 24px 0 #90aec9,
+        0 32px 30px -15px #5a738f,
+        inset 0 -4px 0 #eaf0f8;
+    }
+    .app-tile:active {
+      transform: translateY(8px);
+      box-shadow: 
+        0 6px 0 #90aec9,
+        0 20px 18px -10px #5a738f;
+    }
+
+    /* Icon container */
+    .app-icon {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #f5f9ff, #e3ecf7);
+      border-radius: 22px;
+      box-shadow: 
+        0 12px 0 #8fb0d0,
+        0 8px 15px rgba(0,0,0,0.1),
+        inset 0 -4px 0 #c7daf0;
+      padding: 10px;
+      transition: all 0.2s;
+    }
+    .app-tile:hover .app-icon {
+      box-shadow: 
+        0 16px 0 #6f94bc,
+        0 12px 20px rgba(0,0,0,0.15),
+        inset 0 -4px 0 #b0c8e8;
+    }
+    .app-icon img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 12px;
+      transition: transform 0.2s;
+    }
+    .app-tile:hover .app-icon img {
+      transform: scale(1.08);
+    }
+    .app-icon i {
+      color: #3b6f9e;
+      font-size: 3rem;
+      filter: drop-shadow(2px 4px 4px #8fb0d0);
+    }
+
+    /* App name */
+    .app-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1f3a5f;
+      text-shadow: 0 2px 0 #ffffff;
+    }
+
+    /* App description */
+    .app-desc {
+      color: #4a617c;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      font-weight: 400;
+      padding: 0 5px;
+    }
+
+    /* Fade-in animation */
+    @keyframes rise {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .app-tile {
+      animation: rise 0.4s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>
+      Wall of <img src="https://i.postimg.cc/MGKSy7sj/Logo-small.jpg" alt="Baani"> Apps & Links
+    </h1>
+    <div class="sort-controls">
+      <label for="sortSelect">Sort:</label>
+      <select id="sortSelect">
+        <option value="default">Default</option>
+        <option value="name-asc">A-Z</option>
+        <option value="name-desc">Z-A</option>
+        <option value="category">Category</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="tabs" id="tabs"></div>
+  <div class="app-grid" id="appGrid"></div>
+
+  <script>
+    let allApps = [];
+    let categories = [];
+
+    // Load saved sort preference
+    const savedSort = localStorage.getItem('baaniSort') || 'default';
+    document.getElementById('sortSelect').value = savedSort;
+
+    // Fetch data from Google Sheet
+    google.script.run.withSuccessHandler(displayApps).getAppsData();
+
+    function displayApps(apps) {
+      allApps = apps; // apps are in sheet order
+      categories = [...new Set(apps.map(app => app.category))];
+      
+      // Build tabs
+      const tabsDiv = document.getElementById('tabs');
+      tabsDiv.innerHTML = '<button class="tab-button active" data-category="all">All</button>' +
+        categories.map(cat => `<button class="tab-button" data-category="${cat}">${cat}</button>`).join('');
+      
+      // Tab click events
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterAndSortApps();
+        });
+      });
+      
+      // Sort change event
+      document.getElementById('sortSelect').addEventListener('change', function(e) {
+        localStorage.setItem('baaniSort', e.target.value);
+        filterAndSortApps();
+      });
+      
+      // Initial display
+      filterAndSortApps();
+    }
+
+    function filterAndSortApps() {
+      const activeCategory = document.querySelector('.tab-button.active')?.dataset.category || 'all';
+      const sortType = document.getElementById('sortSelect').value;
+      
+      // Filter by category
+      let filtered = activeCategory === 'all' 
+        ? [...allApps] 
+        : allApps.filter(app => app.category === activeCategory);
+      
+      // Apply sorting (default = keep sheet order)
+      switch(sortType) {
+        case 'name-asc':
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name-desc':
+          filtered.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'category':
+          filtered.sort((a, b) => a.category.localeCompare(b.category));
+          break;
+        // 'default' does nothing – keeps original sheet order
+      }
+      
+      renderGrid(filtered);
+    }
+
+    function renderGrid(apps) {
+      const grid = document.getElementById('appGrid');
+      grid.innerHTML = apps.map(app => `
+        <div class="app-tile" onclick="window.open('${app.url}', '_blank')">
+          <div class="app-icon">
+            ${app.icon ? `<img src="${app.icon}" alt="${app.name}">` : '<i class="fas fa-cube fa-4x"></i>'}
+          </div>
+          <div class="app-name">${app.name}</div>
+          <div class="app-desc">${app.description || ''}</div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
